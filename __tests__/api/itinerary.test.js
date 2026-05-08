@@ -1,10 +1,35 @@
 /**
+ * @jest-environment node
+ */
+
+/**
  * Tests for the /api/itinerary Next.js route.
  * We test the handler directly by constructing minimal NextRequest objects.
  */
 
 const { POST } = require('../../src/app/api/itinerary/route');
 const { NextRequest, NextResponse } = require('next/server');
+
+// NextRequest requires the Request global to be available in Node
+if (!global.Request) {
+  global.Request = class Request {
+    constructor(input, init) {
+      this.url = input;
+      this.method = init?.method || 'GET';
+      this.body = init?.body;
+      this.headers = new Headers(init?.headers);
+    }
+    async json() {
+      return JSON.parse(this.body);
+    }
+  };
+}
+if (!global.Headers) {
+  global.Headers = class Headers {
+    constructor(init) { this.init = init; }
+  };
+}
+
 
 // Helper to build a minimal NextRequest with a JSON body
 function makeReq(body = {}) {

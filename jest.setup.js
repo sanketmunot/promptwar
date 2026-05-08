@@ -45,29 +45,24 @@ jest.mock('lucide-react', () => {
   return mocks;
 });
 
-// jsdom already defines window.location — delete then reassign
-delete window.location;
-window.location = {
-  search: '',
-  origin: 'http://localhost:3000',
-  pathname: '/',
-  href: 'http://localhost:3000/',
-};
+if (typeof window !== 'undefined') {
+  // history.pushState is not fully implemented in jsdom, we can spy on it
+  window.history.pushState = jest.fn();
 
-// history.pushState is already present in jsdom; just spy on it
-window.history.pushState = jest.fn();
-
-// Mock clipboard
-Object.defineProperty(navigator, 'clipboard', {
-  value: { writeText: jest.fn().mockResolvedValue(undefined) },
-  writable: true,
-});
+  // Mock clipboard
+  Object.defineProperty(navigator, 'clipboard', {
+    value: { writeText: jest.fn().mockResolvedValue(undefined) },
+    writable: true,
+  });
+}
 
 // Silence console.error in tests (keeps output clean)
 beforeEach(() => {
   jest.spyOn(console, 'error').mockImplementation(() => {});
   jest.spyOn(console, 'log').mockImplementation(() => {});
-  window.alert = jest.fn();
+  if (typeof window !== 'undefined') {
+    window.alert = jest.fn();
+  }
 });
 
 afterEach(() => {
