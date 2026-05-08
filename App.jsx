@@ -259,27 +259,33 @@ Return ONLY valid JSON in this exact shape, no markdown, no explanation:
     <motion.nav
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
+      aria-label="Main navigation"
       className="flex items-center justify-between p-4 px-6 md:px-12 backdrop-blur-xl bg-white/70 border-b border-white/40 sticky top-0 z-50 shadow-sm"
     >
-      <motion.div
+      <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="flex items-center gap-3 cursor-pointer group"
+        type="button"
+        aria-label="Vagabond AI — go to home"
+        className="flex items-center gap-3 cursor-pointer group bg-transparent border-0 p-0"
         onClick={() => {
           setItinerary(null);
           setViewState('landing');
           window.history.pushState({}, '', window.location.pathname);
         }}
       >
-        <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-2.5 rounded-xl text-white shadow-lg shadow-indigo-500/30 group-hover:shadow-indigo-500/50 transition-all">
+        <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-2.5 rounded-xl text-white shadow-lg shadow-indigo-500/30 group-hover:shadow-indigo-500/50 transition-all" aria-hidden="true">
           <Plane className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
         </div>
         <span className="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-950 to-purple-900">
           Vagabond AI
         </span>
-      </motion.div>
-      <button className="p-2.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50/80 rounded-full transition-colors shadow-sm bg-white/50 border border-slate-100">
-        <Moon className="w-4 h-4" />
+      </motion.button>
+      <button
+        aria-label="Toggle dark mode"
+        className="p-2.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50/80 rounded-full transition-colors shadow-sm bg-white/50 border border-slate-100"
+      >
+        <Moon className="w-4 h-4" aria-hidden="true" />
       </button>
     </motion.nav>
   );
@@ -341,64 +347,77 @@ Return ONLY valid JSON in this exact shape, no markdown, no explanation:
 
               <form onSubmit={handleSubmit} className="space-y-8 relative z-10">
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-indigo-500" /> Destination
+                  <label htmlFor="destination" className="block text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-indigo-500" aria-hidden="true" /> Destination
                   </label>
                   <input
+                    id="destination"
                     type="text"
                     value={destination}
                     onChange={e => setDestination(e.target.value)}
                     placeholder="e.g. Kyoto, Japan or Amalfi Coast"
+                    aria-required="true"
+                    aria-describedby={errors.destination ? 'destination-error' : undefined}
                     className="w-full px-6 py-4 bg-slate-50/50 border border-slate-200/80 rounded-2xl focus:bg-white focus:ring-4 focus:ring-indigo-500/15 focus:border-indigo-500 outline-none transition-all text-slate-800 placeholder-slate-400 font-medium text-lg shadow-sm"
                   />
-                  {errors.destination && <p className="text-pink-500 text-sm mt-2 font-semibold flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-pink-500" />{errors.destination}</p>}
+                  {errors.destination && <p id="destination-error" role="alert" className="text-pink-500 text-sm mt-2 font-semibold flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-pink-500" aria-hidden="true" />{errors.destination}</p>}
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
-                    <label className="block text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-indigo-500" /> Start Date
+                    <label htmlFor="startDate" className="block text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
+                      <Calendar className="w-4 h-4 text-indigo-500" aria-hidden="true" /> Start Date
                     </label>
                     <input
+                      id="startDate"
                       type="date"
                       value={startDate}
                       onChange={e => setStartDate(e.target.value)}
+                      aria-required="true"
+                      aria-describedby={errors.startDate ? 'startDate-error' : undefined}
                       className="w-full px-6 py-4 bg-slate-50/50 border border-slate-200/80 rounded-2xl focus:bg-white focus:ring-4 focus:ring-indigo-500/15 focus:border-indigo-500 outline-none transition-all text-slate-800 font-medium text-lg shadow-sm appearance-none min-h-[60px]"
                     />
-                    {errors.startDate && <p className="text-pink-500 text-sm mt-2 font-semibold flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-pink-500" />{errors.startDate}</p>}
+                    {errors.startDate && <p id="startDate-error" role="alert" className="text-pink-500 text-sm mt-2 font-semibold flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-pink-500" aria-hidden="true" />{errors.startDate}</p>}
                   </div>
 
                   <div>
-                    <label className="block text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-indigo-500" /> End Date
+                    <label htmlFor="endDate" className="block text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
+                      <Calendar className="w-4 h-4 text-indigo-500" aria-hidden="true" /> End Date
                     </label>
                     <input
+                      id="endDate"
                       type="date"
                       value={endDate}
                       onChange={e => setEndDate(e.target.value)}
+                      aria-required="true"
+                      aria-describedby={errors.endDate ? 'endDate-error' : undefined}
                       className="w-full px-6 py-4 bg-slate-50/50 border border-slate-200/80 rounded-2xl focus:bg-white focus:ring-4 focus:ring-indigo-500/15 focus:border-indigo-500 outline-none transition-all text-slate-800 font-medium text-lg shadow-sm appearance-none min-h-[60px]"
                     />
-                    {errors.endDate && <p className="text-pink-500 text-sm mt-2 font-semibold flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-pink-500" />{errors.endDate}</p>}
+                    {errors.endDate && <p id="endDate-error" role="alert" className="text-pink-500 text-sm mt-2 font-semibold flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-pink-500" aria-hidden="true" />{errors.endDate}</p>}
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
-                    <DollarSign className="w-4 h-4 text-indigo-500" /> Total Budget (USD)
+                  <label htmlFor="budget" className="block text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
+                    <DollarSign className="w-4 h-4 text-indigo-500" aria-hidden="true" /> Total Budget (USD)
                   </label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
+                    <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none" aria-hidden="true">
                       <span className="text-slate-400 font-bold text-lg">$</span>
                     </div>
                     <input
+                      id="budget"
                       type="number"
                       value={budget}
                       onChange={e => setBudget(e.target.value)}
                       placeholder="2500"
+                      min="1"
+                      aria-required="true"
+                      aria-describedby={errors.budget ? 'budget-error' : undefined}
                       className="w-full pl-10 pr-6 py-4 bg-slate-50/50 border border-slate-200/80 rounded-2xl focus:bg-white focus:ring-4 focus:ring-indigo-500/15 focus:border-indigo-500 outline-none transition-all text-slate-800 placeholder-slate-400 font-medium text-lg shadow-sm"
                     />
                   </div>
-                  {errors.budget && <p className="text-pink-500 text-sm mt-2 font-semibold flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-pink-500" />{errors.budget}</p>}
+                  {errors.budget && <p id="budget-error" role="alert" className="text-pink-500 text-sm mt-2 font-semibold flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-pink-500" aria-hidden="true" />{errors.budget}</p>}
                 </div>
 
                 <motion.button
@@ -406,18 +425,20 @@ Return ONLY valid JSON in this exact shape, no markdown, no explanation:
                   whileTap={{ scale: 0.98 }}
                   type="submit"
                   disabled={loading}
+                  aria-busy={loading}
+                  aria-label={loading ? 'Generating itinerary, please wait' : 'Generate Magic Itinerary'}
                   className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-5 px-8 rounded-2xl transition-all flex justify-center items-center gap-3 mt-6 shadow-xl hover:shadow-2xl hover:shadow-slate-900/20 disabled:opacity-70 disabled:cursor-not-allowed text-lg relative overflow-hidden group"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className="relative z-10 flex items-center gap-3">
+                  <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" aria-hidden="true" />
+                  <div className="relative z-10 flex items-center gap-3" aria-live="polite" aria-atomic="true">
                     {loading ? (
                       <>
-                        <RefreshCw className="w-5 h-5 animate-spin" />
+                        <RefreshCw className="w-5 h-5 animate-spin" aria-hidden="true" />
                         Crafting your journey...
                       </>
                     ) : (
                       <>
-                        <Sparkles className="w-5 h-5" /> Generate Magic Itinerary
+                        <Sparkles className="w-5 h-5" aria-hidden="true" /> Generate Magic Itinerary
                       </>
                     )}
                   </div>
