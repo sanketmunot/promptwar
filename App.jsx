@@ -3,6 +3,112 @@ import React, { useState, useEffect } from 'react';
 import { Plane, Moon, MapPin, Calendar, DollarSign, Send, Globe, Share2, RefreshCw, Clock, ExternalLink, Sparkles, Map, ChevronRight, Navigation } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+const FeatureCard = ({ icon, title, desc, delay }) => (
+  <motion.div
+    initial={{ y: 30, opacity: 0 }}
+    animate={{ y: 0, opacity: 1 }}
+    transition={{ delay }}
+    className="bg-white/60 backdrop-blur-lg p-8 rounded-3xl border border-white/60 shadow-sm hover:shadow-md transition-all group"
+  >
+    <div className="bg-white w-14 h-14 rounded-2xl flex items-center justify-center shadow-sm mb-6 group-hover:scale-110 transition-transform">
+      {icon}
+    </div>
+    <h3 className="text-xl font-bold text-slate-800 mb-3">{title}</h3>
+    <p className="text-slate-500 font-medium leading-relaxed">{desc}</p>
+  </motion.div>
+);
+
+const LandingPage = ({ onStart }) => {
+  return (
+    <motion.div 
+      key="landing"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0, y: -20 }}
+      className="flex-grow flex flex-col items-center justify-center p-6 sm:p-10 z-10 w-full max-w-6xl mx-auto"
+    >
+      <div className="text-center mb-16 relative mt-8 md:mt-0">
+        <motion.div 
+          initial={{ scale: 0 }} 
+          animate={{ scale: 1 }} 
+          transition={{ type: "spring", delay: 0.2 }}
+          className="absolute -top-12 -left-8 text-yellow-400 opacity-80 hidden md:block"
+        >
+          <Sparkles className="w-10 h-10" />
+        </motion.div>
+        <motion.div 
+          initial={{ scale: 0 }} 
+          animate={{ scale: 1 }} 
+          transition={{ type: "spring", delay: 0.4 }}
+          className="absolute bottom-0 -right-12 text-indigo-400 opacity-80 hidden md:block"
+        >
+          <Plane className="w-12 h-12 rotate-45" />
+        </motion.div>
+        
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 border border-slate-200 text-slate-600 font-semibold text-sm mb-6 shadow-sm"
+        >
+          <Sparkles className="w-4 h-4 text-indigo-500" /> Vagabond AI Travel Engine
+        </motion.div>
+
+        <motion.h1 
+           initial={{ y: 20, opacity: 0 }}
+           animate={{ y: 0, opacity: 1 }}
+           className="text-5xl md:text-7xl font-black text-slate-900 mb-6 leading-[1.1] tracking-tight"
+        >
+          Travel Planning, <br/>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500">
+            Reimagined with AI
+          </span>
+        </motion.h1>
+        <motion.p 
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.1 }}
+          className="text-slate-500 text-lg md:text-2xl font-medium max-w-2xl mx-auto leading-relaxed mb-10"
+        >
+          Stop spending hours researching. Tell Vagabond AI where you want to go, and get a complete, personalized itinerary in seconds.
+        </motion.p>
+        
+        <motion.button
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={onStart}
+          className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold text-lg md:text-xl py-4 px-8 md:py-5 md:px-10 rounded-[2rem] shadow-[0_20px_40px_-15px_rgba(99,102,241,0.6)] hover:shadow-[0_25px_50px_-15px_rgba(99,102,241,0.7)] transition-all flex items-center gap-3 mx-auto"
+        >
+          <Plane className="w-6 h-6" /> Start Planning Now
+        </motion.button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 w-full mt-4">
+        <FeatureCard 
+          icon={<Sparkles className="w-6 h-6 text-indigo-500" />}
+          title="AI-Powered Precision"
+          desc="Our advanced AI creates day-by-day plans tailored exactly to your destination and timeframe."
+          delay={0.3}
+        />
+        <FeatureCard 
+          icon={<DollarSign className="w-6 h-6 text-emerald-500" />}
+          title="Smart Budgeting"
+          desc="Set your budget and we'll estimate costs for activities, helping you stay on track."
+          delay={0.4}
+        />
+        <FeatureCard 
+          icon={<Share2 className="w-6 h-6 text-pink-500" />}
+          title="Easily Shareable"
+          desc="Generate a unique link to your itinerary to share with travel companions instantly."
+          delay={0.5}
+        />
+      </div>
+    </motion.div>
+  );
+};
+
 export default function App() {
   const [destination, setDestination] = useState('');
   const [startDate, setStartDate] = useState('');
@@ -12,6 +118,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [itinerary, setItinerary] = useState(null);
   const [originalBudget, setOriginalBudget] = useState(null);
+  const [viewState, setViewState] = useState('landing');
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -21,6 +128,7 @@ export default function App() {
         const decoded = JSON.parse(decodeURIComponent(atob(plan)));
         setItinerary(decoded);
         setOriginalBudget(decoded.originalBudget || decoded.estimatedCost);
+        setViewState('result');
       } catch (e) {
         console.error("Invalid shareable link", e);
       }
@@ -105,6 +213,7 @@ export default function App() {
       parsed.originalBudget = Number(budget);
 
       setItinerary(parsed);
+      setViewState('result');
     } catch (err) {
       console.error(err);
       alert("Error generating itinerary: " + err.message);
@@ -136,6 +245,7 @@ export default function App() {
     setEndDate('');
     setBudget('');
     setOriginalBudget(null);
+    setViewState('form');
     window.history.pushState({}, '', window.location.pathname); // clear URL
   };
 
@@ -155,7 +265,11 @@ export default function App() {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         className="flex items-center gap-3 cursor-pointer group" 
-        onClick={() => setItinerary(null)}
+        onClick={() => {
+          setItinerary(null);
+          setViewState('landing');
+          window.history.pushState({}, '', window.location.pathname);
+        }}
       >
         <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-2.5 rounded-xl text-white shadow-lg shadow-indigo-500/30 group-hover:shadow-indigo-500/50 transition-all">
           <Plane className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
@@ -180,7 +294,10 @@ export default function App() {
       <TopNav />
       
       <AnimatePresence mode="wait">
-        {!itinerary ? (
+        {viewState === 'landing' && (
+          <LandingPage onStart={() => setViewState('form')} />
+        )}
+        {viewState === 'form' && (
           <motion.main 
             key="form"
             initial={{ opacity: 0, y: 20 }}
@@ -297,7 +414,8 @@ export default function App() {
               </form>
             </motion.div>
           </motion.main>
-        ) : (
+        )}
+        {viewState === 'result' && itinerary && (
           <motion.main 
             key="result"
             initial={{ opacity: 0, y: 30 }}
