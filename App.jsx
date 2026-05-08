@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import { Plane, Moon, MapPin, Calendar, DollarSign, Send, Globe, Share2, RefreshCw, Clock, ExternalLink, Sparkles, Map, ChevronRight, Navigation } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
