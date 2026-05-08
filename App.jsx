@@ -147,11 +147,30 @@ export default function App() {
     const diffTime = Math.abs(end - start);
     const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
-    const prompt = `Generate a ${days}-day trip itinerary for ${destination} from ${startDate} to ${endDate} with a total budget of $${budget} USD. Return ONLY valid JSON in this exact shape, no markdown, no explanation:
+    const prompt = `You are a travel planning assistant. Generate a ${days}-day trip itinerary for ${destination} from ${startDate} to ${endDate} with a total budget of $${budget} USD.
+
+IMPORTANT: Before the itinerary, assess the current safety situation for this destination:
+1. Check for any active armed conflicts, wars, civil unrest, or military operations
+2. Check for known natural hazard risks: seismic/earthquake activity, tsunami risk zones, volcanic activity, hurricane/cyclone/typhoon seasons, flood-prone areas
+3. Check for any recent or ongoing natural disasters
+
+Return ONLY valid JSON in this exact shape, no markdown, no explanation:
 {
   "destination": "string",
   "totalDays": ${days},
   "estimatedCost": number,
+  "advisories": {
+    "warConflict": {
+      "level": "none" | "caution" | "high" | "extreme",
+      "summary": "string (null if level is none)",
+      "details": ["string"] 
+    },
+    "naturalHazards": {
+      "level": "none" | "low" | "moderate" | "high",
+      "summary": "string (null if level is none)",
+      "details": ["string"]
+    }
+  },
   "days": [
     {
       "day": number,
@@ -476,6 +495,70 @@ export default function App() {
                 </button>
               </motion.div>
             </div>
+
+            {/* Advisory Cards */}
+            {(itinerary.advisories?.warConflict?.level !== 'none' || itinerary.advisories?.naturalHazards?.level !== 'none') && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.55 }}
+                className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8"
+              >
+                {/* War / Conflict Advisory */}
+                {itinerary.advisories?.warConflict?.level && itinerary.advisories.warConflict.level !== 'none' && (
+                  <div className={`rounded-2xl border p-5 ${
+                    itinerary.advisories.warConflict.level === 'extreme'
+                      ? 'bg-red-50 border-red-300'
+                      : itinerary.advisories.warConflict.level === 'high'
+                      ? 'bg-orange-50 border-orange-300'
+                      : 'bg-yellow-50 border-yellow-300'
+                  }`}>
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className={`text-lg font-black uppercase tracking-widest text-xs px-2.5 py-1 rounded-full ${
+                        itinerary.advisories.warConflict.level === 'extreme'
+                          ? 'bg-red-100 text-red-700'
+                          : itinerary.advisories.warConflict.level === 'high'
+                          ? 'bg-orange-100 text-orange-700'
+                          : 'bg-yellow-100 text-yellow-700'
+                      }`}>⚔️ {itinerary.advisories.warConflict.level.toUpperCase()} — Conflict Advisory</span>
+                    </div>
+                    <p className="text-sm font-semibold text-slate-700 mb-2">{itinerary.advisories.warConflict.summary}</p>
+                    <ul className="space-y-1">
+                      {itinerary.advisories.warConflict.details?.map((d, i) => (
+                        <li key={i} className="text-xs text-slate-600 flex gap-2"><span className="mt-0.5 shrink-0">•</span>{d}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Natural Hazard Advisory */}
+                {itinerary.advisories?.naturalHazards?.level && itinerary.advisories.naturalHazards.level !== 'none' && (
+                  <div className={`rounded-2xl border p-5 ${
+                    itinerary.advisories.naturalHazards.level === 'high'
+                      ? 'bg-amber-50 border-amber-300'
+                      : itinerary.advisories.naturalHazards.level === 'moderate'
+                      ? 'bg-sky-50 border-sky-300'
+                      : 'bg-slate-50 border-slate-200'
+                  }`}>
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className={`font-black uppercase tracking-widest text-xs px-2.5 py-1 rounded-full ${
+                        itinerary.advisories.naturalHazards.level === 'high'
+                          ? 'bg-amber-100 text-amber-700'
+                          : itinerary.advisories.naturalHazards.level === 'moderate'
+                          ? 'bg-sky-100 text-sky-700'
+                          : 'bg-slate-100 text-slate-600'
+                      }`}>🌊 {itinerary.advisories.naturalHazards.level.toUpperCase()} — Natural Hazard Risk</span>
+                    </div>
+                    <p className="text-sm font-semibold text-slate-700 mb-2">{itinerary.advisories.naturalHazards.summary}</p>
+                    <ul className="space-y-1">
+                      {itinerary.advisories.naturalHazards.details?.map((d, i) => (
+                        <li key={i} className="text-xs text-slate-600 flex gap-2"><span className="mt-0.5 shrink-0">•</span>{d}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </motion.div>
+            )}
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
               <div className="lg:col-span-8 space-y-8">
