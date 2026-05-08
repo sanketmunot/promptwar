@@ -157,6 +157,10 @@ IMPORTANT: Before the itinerary, assess the current safety situation for this de
 Return ONLY valid JSON in this exact shape, no markdown, no explanation:
 {
   "destination": "string",
+  "location": {
+    "lat": number,
+    "lng": number
+  },
   "totalDays": ${days},
   "estimatedCost": number,
   "advisories": {
@@ -583,7 +587,40 @@ Return ONLY valid JSON in this exact shape, no markdown, no explanation:
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
               <div className="lg:col-span-8 space-y-8">
+                {/* Weather Section */}
+                {itinerary.weather?.forecastDays && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.6 }}
+                    className="bg-white/80 backdrop-blur-lg rounded-[2.5rem] shadow-sm border border-slate-100 p-6 sm:p-10"
+                  >
+                    <h3 className="text-2xl font-black mb-6 text-slate-800">Trip Weather Forecast</h3>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      {itinerary.weather.forecastDays.slice(0, 4).map((forecast, idx) => (
+                        <div key={idx} className="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-center">
+                          <p className="text-sm font-bold text-slate-500 mb-2">
+                            Day {idx + 1}
+                          </p>
+                          <div className="text-3xl mb-2">
+                            {forecast.daytimeForecast?.weatherCondition?.type === 'CLEAR' ? '☀️' : 
+                             forecast.daytimeForecast?.weatherCondition?.type === 'CLOUDY' ? '☁️' : 
+                             forecast.daytimeForecast?.weatherCondition?.type === 'RAIN' ? '🌧️' : '⛅'}
+                          </div>
+                          <p className="text-sm font-semibold text-slate-700 mb-1 leading-tight">
+                            {forecast.daytimeForecast?.weatherCondition?.description?.text || 'Variable'}
+                          </p>
+                          <p className="text-xs font-medium text-slate-400">
+                            H: {Math.round(forecast.maxTemperature?.degrees)}° / L: {Math.round(forecast.minTemperature?.degrees)}°
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+
                 <div className="bg-white/80 backdrop-blur-lg rounded-[2.5rem] shadow-sm border border-slate-100 p-6 sm:p-10 relative overflow-hidden">
+
                   <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-indigo-500 via-purple-500 to-pink-500" />
 
                   <div className="space-y-12 pl-4">
