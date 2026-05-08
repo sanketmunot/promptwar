@@ -27,12 +27,7 @@ export const generateItinerary = async (
   ]
 }`;
 
-  const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-  if (!apiKey) {
-    throw new Error("API Key not found. Please set NEXT_PUBLIC_GEMINI_API_KEY in your .env.local file.");
-  }
-
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+  const res = await fetch('/api/itinerary', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -41,7 +36,8 @@ export const generateItinerary = async (
       contents: [{ parts: [{ text: prompt }] }],
       generationConfig: {
         responseMimeType: "application/json",
-        maxOutputTokens: 8192
+        maxOutputTokens: 16384,
+        thinkingConfig: { thinkingBudget: 1024 }
       }
     })
   });

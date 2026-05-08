@@ -7,10 +7,10 @@ const FeatureCard = ({ icon, title, desc, delay }) => (
   <motion.div
     initial={{ y: 30, opacity: 0 }}
     animate={{ y: 0, opacity: 1 }}
-    transition={{ delay }}
-    className="bg-white/60 backdrop-blur-lg p-8 rounded-3xl border border-white/60 shadow-sm hover:shadow-md transition-all group"
+    transition={{ delay, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+    className="bg-white/70 backdrop-blur-xl p-8 rounded-[2rem] border border-white/50 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group"
   >
-    <div className="bg-white w-14 h-14 rounded-2xl flex items-center justify-center shadow-sm mb-6 group-hover:scale-110 transition-transform">
+    <div className="bg-gradient-to-br from-white to-slate-50 w-16 h-16 rounded-2xl flex items-center justify-center shadow-md border border-slate-100 mb-6 group-hover:scale-110 transition-transform duration-300">
       {icon}
     </div>
     <h3 className="text-xl font-bold text-slate-800 mb-3">{title}</h3>
@@ -20,89 +20,75 @@ const FeatureCard = ({ icon, title, desc, delay }) => (
 
 const LandingPage = ({ onStart }) => {
   return (
-    <motion.div 
+    <motion.div
       key="landing"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0, y: -20 }}
-      className="flex-grow flex flex-col items-center justify-center p-6 sm:p-10 z-10 w-full max-w-6xl mx-auto"
+      exit={{ opacity: 0, y: -20, filter: "blur(10px)" }}
+      transition={{ duration: 0.5 }}
+      className="flex-grow flex flex-col items-center justify-center p-6 sm:p-10 z-10 w-full min-h-[calc(100vh-100px)]"
     >
-      <div className="text-center mb-16 relative mt-8 md:mt-0">
-        <motion.div 
-          initial={{ scale: 0 }} 
-          animate={{ scale: 1 }} 
-          transition={{ type: "spring", delay: 0.2 }}
-          className="absolute -top-12 -left-8 text-yellow-400 opacity-80 hidden md:block"
+      <div className="text-center mb-20 relative mt-12 md:mt-0 max-w-4xl mx-auto">
+        <motion.h1
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          className="text-6xl md:text-8xl font-black text-slate-900 mb-8 leading-[1.05] tracking-tighter"
         >
-          <Sparkles className="w-10 h-10" />
-        </motion.div>
-        <motion.div 
-          initial={{ scale: 0 }} 
-          animate={{ scale: 1 }} 
-          transition={{ type: "spring", delay: 0.4 }}
-          className="absolute bottom-0 -right-12 text-indigo-400 opacity-80 hidden md:block"
-        >
-          <Plane className="w-12 h-12 rotate-45" />
-        </motion.div>
-        
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 border border-slate-200 text-slate-600 font-semibold text-sm mb-6 shadow-sm"
-        >
-          <Sparkles className="w-4 h-4 text-indigo-500" /> Vagabond AI Travel Engine
-        </motion.div>
-
-        <motion.h1 
-           initial={{ y: 20, opacity: 0 }}
-           animate={{ y: 0, opacity: 1 }}
-           className="text-5xl md:text-7xl font-black text-slate-900 mb-6 leading-[1.1] tracking-tight"
-        >
-          Travel Planning, <br/>
+          Travel Planning, <br className="hidden md:block" />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500">
             Reimagined with AI
           </span>
         </motion.h1>
-        <motion.p 
+
+        <motion.p
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.1 }}
-          className="text-slate-500 text-lg md:text-2xl font-medium max-w-2xl mx-auto leading-relaxed mb-10"
+          transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          className="text-slate-500 text-lg md:text-2xl font-medium max-w-2xl mx-auto leading-relaxed mb-12"
         >
           Stop spending hours researching. Tell Vagabond AI where you want to go, and get a complete, personalized itinerary in seconds.
         </motion.p>
-        
-        <motion.button
+
+        <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={onStart}
-          className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold text-lg md:text-xl py-4 px-8 md:py-5 md:px-10 rounded-[2rem] shadow-[0_20px_40px_-15px_rgba(99,102,241,0.6)] hover:shadow-[0_25px_50px_-15px_rgba(99,102,241,0.7)] transition-all flex items-center gap-3 mx-auto"
+          transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          className="flex justify-center"
         >
-          <Plane className="w-6 h-6" /> Start Planning Now
-        </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={onStart}
+            className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-lg md:text-xl py-5 px-12 rounded-full shadow-2xl hover:shadow-slate-900/30 transition-all flex items-center gap-3 relative overflow-hidden group"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <span className="relative z-10 flex items-center gap-3">
+              <Plane className="w-6 h-6 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+              Start Planning Now
+            </span>
+          </motion.button>
+        </motion.div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 w-full mt-4">
-        <FeatureCard 
-          icon={<Sparkles className="w-6 h-6 text-indigo-500" />}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl px-8 md:px-12 mt-8 pb-16">
+        <FeatureCard
+          icon={<Sparkles className="w-8 h-8 text-indigo-500" />}
           title="AI-Powered Precision"
           desc="Our advanced AI creates day-by-day plans tailored exactly to your destination and timeframe."
-          delay={0.3}
-        />
-        <FeatureCard 
-          icon={<DollarSign className="w-6 h-6 text-emerald-500" />}
-          title="Smart Budgeting"
-          desc="Set your budget and we'll estimate costs for activities, helping you stay on track."
           delay={0.4}
         />
-        <FeatureCard 
-          icon={<Share2 className="w-6 h-6 text-pink-500" />}
+        <FeatureCard
+          icon={<DollarSign className="w-8 h-8 text-emerald-500" />}
+          title="Smart Budgeting"
+          desc="Set your budget and we'll estimate costs for activities, helping you stay on track."
+          delay={0.5}
+        />
+        <FeatureCard
+          icon={<Share2 className="w-8 h-8 text-pink-500" />}
           title="Easily Shareable"
           desc="Generate a unique link to your itinerary to share with travel companions instantly."
-          delay={0.5}
+          delay={0.6}
         />
       </div>
     </motion.div>
@@ -178,14 +164,7 @@ export default function App() {
 }`;
 
     try {
-      const apiKey = import.meta.env?.VITE_GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-      if (!apiKey) {
-        alert("API Key not found. Please set NEXT_PUBLIC_GEMINI_API_KEY in your environment.");
-        setLoading(false);
-        return;
-      }
-
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+      const res = await fetch('/api/itinerary', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -194,7 +173,9 @@ export default function App() {
           contents: [{ parts: [{ text: prompt }] }],
           generationConfig: {
             responseMimeType: "application/json",
-            maxOutputTokens: 8192
+            maxOutputTokens: 16384,
+            // Cap thinking tokens so the JSON response has enough room
+            thinkingConfig: { thinkingBudget: 1024 }
           }
         })
       });
@@ -207,7 +188,7 @@ export default function App() {
       const text = data.candidates[0].content.parts[0].text;
       const cleanText = text.replace(/```json|```/g, "").trim();
       const parsed = JSON.parse(cleanText);
-      
+
       parsed.startDate = startDate;
       parsed.endDate = endDate;
       parsed.originalBudget = Number(budget);
@@ -256,15 +237,15 @@ export default function App() {
   };
 
   const TopNav = () => (
-    <motion.nav 
+    <motion.nav
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       className="flex items-center justify-between p-4 px-6 md:px-12 backdrop-blur-xl bg-white/70 border-b border-white/40 sticky top-0 z-50 shadow-sm"
     >
-      <motion.div 
+      <motion.div
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="flex items-center gap-3 cursor-pointer group" 
+        className="flex items-center gap-3 cursor-pointer group"
         onClick={() => {
           setItinerary(null);
           setViewState('landing');
@@ -285,138 +266,149 @@ export default function App() {
   );
 
   return (
-    <div className="min-h-screen bg-[#f4f7f9] font-sans flex flex-col relative overflow-hidden selection:bg-indigo-100 selection:text-indigo-900">
+    <div className="min-h-screen bg-slate-50 font-sans flex flex-col relative overflow-hidden selection:bg-indigo-100 selection:text-indigo-900">
       {/* Decorative Background Elements */}
-      <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-indigo-50/80 via-purple-50/40 to-transparent -z-10 pointer-events-none" />
-      <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-purple-200/40 blur-[100px] -z-10 pointer-events-none" />
-      <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-indigo-200/40 blur-[120px] -z-10 pointer-events-none" />
-      
+      <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+        <div className="absolute -top-[20%] -left-[10%] w-[70vw] h-[70vw] rounded-full bg-gradient-to-br from-indigo-200/40 to-purple-200/40 blur-[120px]" />
+        <div className="absolute top-[40%] -right-[10%] w-[60vw] h-[60vw] rounded-full bg-gradient-to-br from-pink-200/30 to-rose-200/30 blur-[120px]" />
+        <div className="absolute -bottom-[20%] left-[20%] w-[80vw] h-[80vw] rounded-full bg-gradient-to-tr from-blue-200/30 to-indigo-200/30 blur-[150px]" />
+        <div className="absolute inset-0 bg-white/40 backdrop-blur-[100px]" />
+      </div>
+
       <TopNav />
-      
+
       <AnimatePresence mode="wait">
         {viewState === 'landing' && (
           <LandingPage onStart={() => setViewState('form')} />
         )}
         {viewState === 'form' && (
-          <motion.main 
+          <motion.main
             key="form"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
-            transition={{ duration: 0.4 }}
-            className="flex-grow flex flex-col items-center justify-center p-6 sm:p-10 z-10"
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            className="flex-grow flex flex-col items-center justify-center p-6 sm:p-10 z-10 w-full min-h-[calc(100vh-100px)]"
           >
-            <div className="text-center mb-12 relative">
-              <motion.div 
-                initial={{ scale: 0 }} 
-                animate={{ scale: 1 }} 
-                transition={{ type: "spring", delay: 0.2 }}
-                className="absolute -top-8 -right-8 text-yellow-400 opacity-80"
+            <div className="text-center mb-16 relative max-w-3xl mx-auto mt-10 md:mt-0">
+              <motion.h1
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                className="text-5xl md:text-7xl font-black text-slate-900 mb-6 leading-[1.05] tracking-tighter"
               >
-                <Sparkles className="w-8 h-8" />
-              </motion.div>
-              <h1 className="text-5xl md:text-[3.5rem] font-black text-slate-900 mb-6 leading-[1.1] tracking-tight">
-                Design Your Perfect <br/>
+                Design Your Perfect <br className="hidden md:block" />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500">
                   Getaway with AI
                 </span>
-              </h1>
-              <p className="text-slate-500 text-lg md:text-xl font-medium max-w-xl mx-auto leading-relaxed">
+              </motion.h1>
+              <motion.p
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                className="text-slate-500 text-lg md:text-xl font-medium max-w-2xl mx-auto leading-relaxed"
+              >
                 Enter your details below and our engine will craft a personalized, day-by-day itinerary in seconds.
-              </p>
+              </motion.p>
             </div>
 
-            <motion.div 
-              className="bg-white/70 backdrop-blur-xl p-8 rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border border-white/60 w-full max-w-3xl relative"
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="bg-white/80 backdrop-blur-2xl p-8 md:p-12 rounded-[3rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] border border-white w-full max-w-3xl relative overflow-hidden"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/10 rounded-[2.5rem] pointer-events-none" />
-              
-              <form onSubmit={handleSubmit} className="space-y-7 relative z-10">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/60 to-white/10 pointer-events-none" />
+
+              <form onSubmit={handleSubmit} className="space-y-8 relative z-10">
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-2.5 flex items-center gap-2">
+                  <label className="block text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-indigo-500" /> Destination
                   </label>
-                  <input 
-                    type="text" 
-                    value={destination} 
+                  <input
+                    type="text"
+                    value={destination}
                     onChange={e => setDestination(e.target.value)}
                     placeholder="e.g. Kyoto, Japan or Amalfi Coast"
-                    className="w-full px-5 py-4 bg-white/80 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all text-slate-800 placeholder-slate-400 font-medium text-lg shadow-sm"
+                    className="w-full px-6 py-4 bg-slate-50/50 border border-slate-200/80 rounded-2xl focus:bg-white focus:ring-4 focus:ring-indigo-500/15 focus:border-indigo-500 outline-none transition-all text-slate-800 placeholder-slate-400 font-medium text-lg shadow-sm"
                   />
-                  {errors.destination && <p className="text-pink-500 text-sm mt-2 font-semibold flex items-center gap-1"><span className="w-1 h-1 rounded-full bg-pink-500" />{errors.destination}</p>}
+                  {errors.destination && <p className="text-pink-500 text-sm mt-2 font-semibold flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-pink-500" />{errors.destination}</p>}
                 </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
-                    <label className="block text-sm font-bold text-slate-700 mb-2.5 flex items-center gap-2">
+                    <label className="block text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
                       <Calendar className="w-4 h-4 text-indigo-500" /> Start Date
                     </label>
-                    <input 
-                      type="date" 
-                      value={startDate} 
+                    <input
+                      type="date"
+                      value={startDate}
                       onChange={e => setStartDate(e.target.value)}
-                      className="w-full px-5 py-4 bg-white/80 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all text-slate-800 font-medium text-lg shadow-sm appearance-none"
+                      className="w-full px-6 py-4 bg-slate-50/50 border border-slate-200/80 rounded-2xl focus:bg-white focus:ring-4 focus:ring-indigo-500/15 focus:border-indigo-500 outline-none transition-all text-slate-800 font-medium text-lg shadow-sm appearance-none min-h-[60px]"
                     />
-                    {errors.startDate && <p className="text-pink-500 text-sm mt-2 font-semibold flex items-center gap-1"><span className="w-1 h-1 rounded-full bg-pink-500" />{errors.startDate}</p>}
+                    {errors.startDate && <p className="text-pink-500 text-sm mt-2 font-semibold flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-pink-500" />{errors.startDate}</p>}
                   </div>
-                  
+
                   <div>
-                    <label className="block text-sm font-bold text-slate-700 mb-2.5 flex items-center gap-2">
+                    <label className="block text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
                       <Calendar className="w-4 h-4 text-indigo-500" /> End Date
                     </label>
-                    <input 
-                      type="date" 
-                      value={endDate} 
+                    <input
+                      type="date"
+                      value={endDate}
                       onChange={e => setEndDate(e.target.value)}
-                      className="w-full px-5 py-4 bg-white/80 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all text-slate-800 font-medium text-lg shadow-sm appearance-none"
+                      className="w-full px-6 py-4 bg-slate-50/50 border border-slate-200/80 rounded-2xl focus:bg-white focus:ring-4 focus:ring-indigo-500/15 focus:border-indigo-500 outline-none transition-all text-slate-800 font-medium text-lg shadow-sm appearance-none min-h-[60px]"
                     />
-                    {errors.endDate && <p className="text-pink-500 text-sm mt-2 font-semibold flex items-center gap-1"><span className="w-1 h-1 rounded-full bg-pink-500" />{errors.endDate}</p>}
+                    {errors.endDate && <p className="text-pink-500 text-sm mt-2 font-semibold flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-pink-500" />{errors.endDate}</p>}
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-2.5 flex items-center gap-2">
+                  <label className="block text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
                     <DollarSign className="w-4 h-4 text-indigo-500" /> Total Budget (USD)
                   </label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                    <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
                       <span className="text-slate-400 font-bold text-lg">$</span>
                     </div>
-                    <input 
-                      type="number" 
-                      value={budget} 
+                    <input
+                      type="number"
+                      value={budget}
                       onChange={e => setBudget(e.target.value)}
                       placeholder="2500"
-                      className="w-full pl-9 pr-5 py-4 bg-white/80 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all text-slate-800 placeholder-slate-400 font-medium text-lg shadow-sm"
+                      className="w-full pl-10 pr-6 py-4 bg-slate-50/50 border border-slate-200/80 rounded-2xl focus:bg-white focus:ring-4 focus:ring-indigo-500/15 focus:border-indigo-500 outline-none transition-all text-slate-800 placeholder-slate-400 font-medium text-lg shadow-sm"
                     />
                   </div>
-                  {errors.budget && <p className="text-pink-500 text-sm mt-2 font-semibold flex items-center gap-1"><span className="w-1 h-1 rounded-full bg-pink-500" />{errors.budget}</p>}
+                  {errors.budget && <p className="text-pink-500 text-sm mt-2 font-semibold flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-pink-500" />{errors.budget}</p>}
                 </div>
-                
-                <motion.button 
-                  whileHover={{ scale: 1.01 }}
+
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  type="submit" 
+                  type="submit"
                   disabled={loading}
-                  className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold py-4 px-6 rounded-2xl transition-all flex justify-center items-center gap-3 mt-4 shadow-[0_10px_20px_-10px_rgba(99,102,241,0.6)] hover:shadow-[0_15px_30px_-10px_rgba(99,102,241,0.7)] disabled:opacity-70 disabled:cursor-not-allowed text-lg"
+                  className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-5 px-8 rounded-2xl transition-all flex justify-center items-center gap-3 mt-6 shadow-xl hover:shadow-2xl hover:shadow-slate-900/20 disabled:opacity-70 disabled:cursor-not-allowed text-lg relative overflow-hidden group"
                 >
-                  {loading ? (
-                    <>
-                      <RefreshCw className="w-5 h-5 animate-spin" />
-                      Crafting your journey...
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="w-5 h-5" /> Generate Magic Itinerary
-                    </>
-                  )}
+                  <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="relative z-10 flex items-center gap-3">
+                    {loading ? (
+                      <>
+                        <RefreshCw className="w-5 h-5 animate-spin" />
+                        Crafting your journey...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-5 h-5" /> Generate Magic Itinerary
+                      </>
+                    )}
+                  </div>
                 </motion.button>
               </form>
             </motion.div>
           </motion.main>
         )}
         {viewState === 'result' && itinerary && (
-          <motion.main 
+          <motion.main
             key="result"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -425,7 +417,7 @@ export default function App() {
           >
             <div className="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
               <div>
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2 }}
@@ -433,7 +425,7 @@ export default function App() {
                 >
                   <Globe className="w-3.5 h-3.5" /> Your Itinerary is Ready
                 </motion.div>
-                <motion.h1 
+                <motion.h1
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
@@ -441,7 +433,7 @@ export default function App() {
                 >
                   {itinerary.destination}
                 </motion.h1>
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.4 }}
@@ -461,20 +453,20 @@ export default function App() {
                   </div>
                 </motion.div>
               </div>
-              
-              <motion.div 
+
+              <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.5 }}
                 className="flex items-center gap-3 w-full md:w-auto"
               >
-                <button 
+                <button
                   onClick={handleShare}
                   className="flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-3 bg-white border border-slate-200 text-slate-700 font-bold rounded-xl hover:bg-slate-50 transition shadow-sm hover:shadow"
                 >
                   <Share2 className="w-4 h-4" /> Share
                 </button>
-                <button 
+                <button
                   onClick={fetchItinerary}
                   disabled={loading}
                   className="flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-3 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition shadow-md hover:shadow-lg disabled:opacity-70"
@@ -489,15 +481,15 @@ export default function App() {
               <div className="lg:col-span-8 space-y-8">
                 <div className="bg-white/80 backdrop-blur-lg rounded-[2.5rem] shadow-sm border border-slate-100 p-6 sm:p-10 relative overflow-hidden">
                   <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-indigo-500 via-purple-500 to-pink-500" />
-                  
+
                   <div className="space-y-12 pl-4">
                     {itinerary.days?.map((dayPlan, idx) => (
-                      <motion.div 
+                      <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-50px" }}
                         transition={{ delay: idx * 0.1 }}
-                        key={idx} 
+                        key={idx}
                         className="relative"
                       >
                         <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-8">
@@ -508,12 +500,12 @@ export default function App() {
                             <h3 className="text-2xl font-black text-slate-800">{dayPlan.title}</h3>
                           </div>
                         </div>
-                        
+
                         <div className="ml-6 pl-8 border-l-[3px] border-slate-100 space-y-6 relative">
                           {dayPlan.activities?.map((act, i) => (
-                            <motion.div 
+                            <motion.div
                               whileHover={{ x: 5 }}
-                              key={i} 
+                              key={i}
                               className="relative group bg-white border border-slate-100 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all"
                             >
                               <div className="absolute w-4 h-4 bg-white border-[3px] border-indigo-400 rounded-full -left-[41px] top-6 group-hover:scale-125 transition-transform" />
@@ -538,16 +530,16 @@ export default function App() {
               </div>
 
               <div className="lg:col-span-4 space-y-8">
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.6 }}
                   className="bg-white rounded-[2.5rem] p-3 shadow-sm border border-slate-100 relative group overflow-hidden"
                 >
                   <div className="w-full h-72 bg-slate-100 rounded-[2rem] overflow-hidden relative">
-                    <a 
-                      href={`https://maps.google.com/maps?q=${encodeURIComponent(itinerary.destination)}`} 
-                      target="_blank" 
+                    <a
+                      href={`https://maps.google.com/maps?q=${encodeURIComponent(itinerary.destination)}`}
+                      target="_blank"
                       rel="noreferrer"
                       className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-4 py-2.5 rounded-xl text-sm font-bold text-slate-800 shadow-lg flex items-center gap-2 hover:bg-white hover:scale-105 transition-all z-10"
                     >
@@ -565,7 +557,7 @@ export default function App() {
                   </div>
                 </motion.div>
 
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.7 }}
@@ -574,14 +566,14 @@ export default function App() {
                   <div className="absolute top-[-20%] right-[-10%] opacity-10 transform rotate-12">
                     <Navigation className="w-64 h-64" />
                   </div>
-                  
+
                   <h3 className="text-2xl font-black mb-8 flex items-center gap-3 relative z-10">
                     <div className="bg-indigo-500/30 p-2 rounded-lg">
-                      <DollarSign className="w-6 h-6 text-indigo-300" /> 
+                      <DollarSign className="w-6 h-6 text-indigo-300" />
                     </div>
                     Budget Overview
                   </h3>
-                  
+
                   <div className="space-y-6 relative z-10 text-[15px]">
                     <div className="flex justify-between items-center border-b border-indigo-800/50 pb-5">
                       <span className="text-indigo-200 font-medium">Trip Duration</span>
@@ -599,8 +591,8 @@ export default function App() {
                       <span className="text-indigo-200 font-medium">Daily Average</span>
                       <span className="font-bold text-lg">${Math.round(itinerary.estimatedCost / itinerary.totalDays)}</span>
                     </div>
-                    
-                    <button 
+
+                    <button
                       onClick={handleNewTrip}
                       className="w-full mt-6 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold py-4 rounded-2xl transition-all flex items-center justify-center gap-2 group"
                     >
@@ -613,7 +605,7 @@ export default function App() {
           </motion.main>
         )}
       </AnimatePresence>
-      
+
       <footer className="text-center py-8 text-sm text-slate-400 font-medium z-10">
         © {new Date().getFullYear()} Vagabond AI. Powered by Gemini.
       </footer>
