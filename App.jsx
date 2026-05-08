@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Plane, Moon, MapPin, Calendar, DollarSign, Send, Globe, Share2, RefreshCw, Clock, ExternalLink, Sparkles, Map, ChevronRight, Navigation } from 'lucide-react';
+import { Plane, Moon, MapPin, Calendar, DollarSign, Send, Globe, Share2, RefreshCw, Clock, ExternalLink, Sparkles, Map, ChevronRight, Navigation, PartyPopper } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const FeatureCard = ({ icon, title, desc, delay }) => (
@@ -147,12 +147,13 @@ export default function App() {
     const diffTime = Math.abs(end - start);
     const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
-    const prompt = `You are a travel planning assistant. Generate a ${days}-day trip itinerary for ${destination} from ${startDate} to ${endDate} with a total budget of $${budget} USD.
+const prompt = `You are a travel planning assistant. Generate a ${days}-day trip itinerary for ${destination} from ${startDate} to ${endDate} with a total budget of $${budget} USD.
 
-IMPORTANT: Before the itinerary, assess the current safety situation for this destination:
-1. Check for any active armed conflicts, wars, civil unrest, or military operations
-2. Check for known natural hazard risks: seismic/earthquake activity, tsunami risk zones, volcanic activity, hurricane/cyclone/typhoon seasons, flood-prone areas
-3. Check for any recent or ongoing natural disasters
+IMPORTANT: Before generating the itinerary, please:
+1. Assess safety: Check for active armed conflicts, civil unrest, natural hazards, and recent disasters.
+2. Identify festivals: Check if any local, cultural, or national festivals, holidays, or major events are taking place in ${destination} between ${startDate} and ${endDate}. 
+   - List these in the 'festivals' array.
+   - If festivals are happening, integrate them organically into the 'days' activities.
 
 Return ONLY valid JSON in this exact shape, no markdown, no explanation:
 {
@@ -163,6 +164,9 @@ Return ONLY valid JSON in this exact shape, no markdown, no explanation:
   },
   "totalDays": ${days},
   "estimatedCost": number,
+  "festivals": [
+    { "name": "string", "date": "string", "description": "string" }
+  ],
   "advisories": {
     "warConflict": {
       "level": "none" | "caution" | "high" | "extreme",
@@ -613,6 +617,32 @@ Return ONLY valid JSON in this exact shape, no markdown, no explanation:
                           <p className="text-xs font-medium text-slate-400">
                             H: {Math.round(forecast.maxTemperature?.degrees)}° / L: {Math.round(forecast.minTemperature?.degrees)}°
                           </p>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Festivals Section */}
+                {itinerary.festivals && itinerary.festivals.length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.7 }}
+                    className="bg-white/80 backdrop-blur-lg rounded-[2.5rem] shadow-sm border border-purple-100 p-6 sm:p-10"
+                  >
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="p-2 bg-purple-100 text-purple-600 rounded-xl">
+                        <PartyPopper className="w-6 h-6" />
+                      </div>
+                      <h3 className="text-2xl font-black text-slate-800">Festivals & Events</h3>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {itinerary.festivals.map((fest, idx) => (
+                        <div key={idx} className="bg-purple-50/50 border border-purple-100 rounded-2xl p-5">
+                          <h4 className="font-bold text-slate-800 text-lg mb-1">{fest.name}</h4>
+                          <p className="text-sm font-semibold text-purple-600 mb-2">{fest.date}</p>
+                          <p className="text-slate-600 text-sm leading-relaxed">{fest.description}</p>
                         </div>
                       ))}
                     </div>
