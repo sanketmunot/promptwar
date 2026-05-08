@@ -45,21 +45,17 @@ jest.mock('lucide-react', () => {
   return mocks;
 });
 
-// Mock window.location and history
-Object.defineProperty(window, 'location', {
-  value: {
-    search: '',
-    origin: 'http://localhost:3000',
-    pathname: '/',
-    href: 'http://localhost:3000/',
-  },
-  writable: true,
-});
+// jsdom already defines window.location — delete then reassign
+delete window.location;
+window.location = {
+  search: '',
+  origin: 'http://localhost:3000',
+  pathname: '/',
+  href: 'http://localhost:3000/',
+};
 
-Object.defineProperty(window, 'history', {
-  value: { pushState: jest.fn() },
-  writable: true,
-});
+// history.pushState is already present in jsdom; just spy on it
+window.history.pushState = jest.fn();
 
 // Mock clipboard
 Object.defineProperty(navigator, 'clipboard', {
